@@ -13,3 +13,8 @@ Chapter Three
 * LeftistHeap (height biased)
 * WeightBiasedLeftistHeap
 * Binomial Heap
+
+Chapter Four
+------------
+
+* Stream
