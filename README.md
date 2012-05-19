@@ -18,3 +18,8 @@ Chapter Four
 ------------
 
 * Stream
+
+Chapter Five
+------------
+
+* BatchedQueue
