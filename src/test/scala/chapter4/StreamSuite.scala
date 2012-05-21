@@ -8,14 +8,14 @@ class StreamSuite extends FunSuite {
   def bottom = throw new Exception("bottom was forced!")
   
   test("head of empty stream fails") {
-    val s = Stream.empty[Int]
+    val s = Stream.empty
     intercept[Exception] {
       s.head
     }
   }
   
   test("tail of empty stream fails") {
-    val s = Stream.empty[Int]
+    val s = Stream.empty
     intercept[Exception] {
       s.tail
     }

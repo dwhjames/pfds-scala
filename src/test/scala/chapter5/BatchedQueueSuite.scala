@@ -33,7 +33,7 @@ class BatchedQueueSuite extends FunSuite {
     (!q.front.isEmpty) || q.rear.isEmpty
   
   test("queue invariant") {
-    var q: BatchedQueue[Int] = BatchedQueue.empty
+    var q = BatchedQueue.empty[Int]
     assert(invariant(q))
     
     q = q :+ 1

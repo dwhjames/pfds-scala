@@ -6,24 +6,24 @@ import scala.annotation.tailrec
 class LeftistHeapSuite extends FunSuite {
   
   test("empty heap is empty") {
-    val h = LeftistHeap.empty[Int]
+    val h = LeftistHeap.empty
     assert(h.isEmpty)
   }
   
   test("empty heap has rank 0") {
-    val h = LeftistHeap.empty[Int]
+    val h = LeftistHeap.empty
     expect(0) { h.rank }
   }
   
   test("findMin of empty heap fails") {
-    val h = LeftistHeap.empty[Int]
+    val h = LeftistHeap.empty
     intercept[Exception] {
       h.findMin
     }
   }
   
   test("deleteMin of empty heap fails") {
-    val h = LeftistHeap.empty[Int]
+    val h = LeftistHeap.empty
     intercept[Exception] {
       h.deleteMin
     }
@@ -60,7 +60,7 @@ class LeftistHeapSuite extends FunSuite {
   }
   
   test("check rank of empty heap") {
-    val h = LeftistHeap.empty[Int]
+    val h = LeftistHeap.empty
     assert(checkRank(h))
   }
   

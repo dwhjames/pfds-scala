@@ -57,8 +57,7 @@ class BinomialHeapSuite extends FunSuite {
       }
     }
   }
-  def checkRanks[A](l: List[Tree[A]]): Boolean =
-    l.foldRight(true)(checkRank(_) && _)
+  def checkRanks[A](l: List[Tree[A]]): Boolean = l.forall(checkRank(_))
   
   test("check ranks after insertions") {
     val h = BinomialHeap(2,4,6,8,10,1,3,5,7,9)
@@ -78,7 +77,7 @@ class BinomialHeapSuite extends FunSuite {
   
   def checkRankOrder[A](l: List[Tree[A]]): Boolean = {
     val ranks = l.map(_.rank)
-    (ranks, ranks.tail).zipped.view.map(x => x._1 <= x._2).fold(true)(_ && _)
+    (ranks, ranks.tail).zipped.forall(_ <= _)
   }
   
   test("check rank ordering after insertions") {

@@ -5,24 +5,24 @@ import org.scalatest.FunSuite
 class WeightBiasedLeftistHeapSuite extends FunSuite {
   
   test("empty heap is empty") {
-    val h = WeightBiasedLeftistHeap.empty[Int]
+    val h = WeightBiasedLeftistHeap.empty
     assert(h.isEmpty)
   }
   
   test("empty heap has size 0") {
-    val h = WeightBiasedLeftistHeap.empty[Int]
+    val h = WeightBiasedLeftistHeap.empty
     expect(0) { h.size }
   }
   
   test("findMin of empty heap fails") {
-    val h = WeightBiasedLeftistHeap.empty[Int]
+    val h = WeightBiasedLeftistHeap.empty
     intercept[Exception] {
       h.findMin
     }
   }
   
   test("deleteMin of empty heap fails") {
-    val h = WeightBiasedLeftistHeap.empty[Int]
+    val h = WeightBiasedLeftistHeap.empty
     intercept[Exception] {
       h.deleteMin
     }
@@ -59,7 +59,7 @@ class WeightBiasedLeftistHeapSuite extends FunSuite {
   }
   
   test("check size of empty heap") {
-    val h = WeightBiasedLeftistHeap.empty[Int]
+    val h = WeightBiasedLeftistHeap.empty
     assert(checkSize(h))
   }
   

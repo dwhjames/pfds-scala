@@ -5,7 +5,7 @@ import org.scalatest.FunSuite
 class SetSuite extends FunSuite {
   
   test("empty set is empty") {
-    val s = Set.empty[Int]
+    val s = Set.empty
     assert(s.isEmpty)
   }
   
@@ -15,7 +15,7 @@ class SetSuite extends FunSuite {
   }
   
   test("no membership empty set") {
-    val s = Set.empty[Int]
+    val s = Set.empty
     assert(!s.member(1))
   }
   
