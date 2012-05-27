@@ -24,3 +24,4 @@ Chapter Five
 
 * BatchedQueue
 * Deque
+* SplayHeap
