@@ -23,3 +23,4 @@ Chapter Five
 ------------
 
 * BatchedQueue
+* Deque
