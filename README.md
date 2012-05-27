@@ -25,3 +25,4 @@ Chapter Five
 * BatchedQueue
 * Deque
 * SplayHeap
+* PairingHeap
