@@ -12,7 +12,7 @@ Chapter Three
 
 * LeftistHeap (height biased)
 * WeightBiasedLeftistHeap
-* Binomial Heap
+* BinomialHeap
 
 Chapter Four
 ------------
@@ -31,3 +31,4 @@ Chapter Six
 -----------
 
 * BankersQueue
+* LazyBinomialHeap
