@@ -26,3 +26,8 @@ Chapter Five
 * Deque
 * SplayHeap
 * PairingHeap
+
+Chapter Six
+-----------
+
+* BankersQueue
