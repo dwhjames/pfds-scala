@@ -32,3 +32,4 @@ Chapter Six
 
 * BankersQueue
 * LazyBinomialHeap
+* PhysicistsQueue
