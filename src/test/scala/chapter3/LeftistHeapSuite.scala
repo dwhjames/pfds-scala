@@ -44,19 +44,17 @@ class LeftistHeapSuite extends FunSuite {
     expect(1) { h.findMin }
   }
   
+  import LeftistHeap._
   def checkRank[A](h: LeftistHeap[A]): Boolean = {
-    import LeftistHeap._
-    @tailrec def rightDepthAcc[A](h: LeftistHeap[A], acc: Int): Int = h match {
-      case Leaf => acc
-      case Branch(_, _, _, r) => rightDepthAcc(r, acc+1)
+    def checkRankH(h: LeftistHeap[A]): (Int, Boolean) = h match {
+      case Leaf => (0, true)
+      case Branch(rnk, _, l, r) => {
+        val (_,    lb) = checkRankH(l)
+        val (rrnk, rb) = checkRankH(r)
+        (rrnk+1, lb && rb && (rnk == rrnk+1))
+      }
     }
-    h match {
-      case Leaf => true
-      case Branch(d, _, l, r) =>
-        (d == rightDepthAcc(h, 0)) &&
-        checkRank(l) &&
-        checkRank(r)
-    }
+    checkRankH(h)._2
   }
   
   test("check rank of empty heap") {
@@ -75,7 +73,6 @@ class LeftistHeapSuite extends FunSuite {
   }
   
   def checkLeftist[A](h: LeftistHeap[A]): Boolean = {
-    import LeftistHeap._
     h match {
       case Leaf => true
       case Branch(_, _, l, r) =>

@@ -34,16 +34,13 @@ class PairingHeapSuite extends FunSuite {
   }
   
   import PairingHeap._
-  def forallHeap[A](h: PairingHeap[A], p: (A) => Boolean): Boolean = h match {
-    case Leaf => true
-    case Branch(x, xs) =>
-      p(x) && xs.forall(forallHeap(_, p))
-  }
-  def checkHeap[A <% Ordered[A]](h: PairingHeap[A]): Boolean = h match {
-    case Leaf => true
-    case Branch(x, xs) =>
-      xs.forall(forallHeap(_, (y:A) => x <= y)) &&
-      xs.forall(checkHeap(_))
+  def checkHeap[A <% Ordered[A]](h: PairingHeap[A]): Boolean = {
+    def checkHeapH(h: PairingHeap[A], p: (A) => Boolean): Boolean = h match {
+      case Leaf => true
+      case Branch(x, xs) =>
+        p(x) && xs.forall(checkHeapH(_, (y:A) => x <= y))
+    }
+    checkHeapH(h, (x:A) => true)
   }
   
   test("check heap structure") {

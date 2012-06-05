@@ -34,22 +34,25 @@ class LazyPairingHeapSuite extends FunSuite {
   }
 
   import LazyPairingHeap._
-  def checkHeap[A <% Ordered[A]](p: (A) => Boolean, h: LazyPairingHeap[A]): Boolean =
-    if (h.isEmpty)
-      true
-    else {
-      val b = h.asInstanceOf[Branch[A]]
-      p(b.elem) &&
-        checkHeap((x:A) => x >= b.elem, b.left) &&
-        checkHeap((x:A) => x >= b.elem, b.right)
-    }
+  def checkHeap[A <% Ordered[A]](h: LazyPairingHeap[A]): Boolean = {
+    def checkHeapH(h: LazyPairingHeap[A], p: (A) => Boolean): Boolean =
+      if (h.isEmpty)
+        true
+      else {
+        val b = h.asInstanceOf[Branch[A]]
+        p(b.elem) &&
+          checkHeapH(b.left, (x:A) => x >= b.elem) &&
+          checkHeapH(b.right, (x:A) => x >= b.elem)
+      }
+    checkHeapH(h, (x:A) => true)
+  }
 
   test("check heap structure") {
     var h = LazyPairingHeap(2,4,6,8,10,1,3,5,7,9)
-    assert(checkHeap((x:Int) => true, h))
+    assert(checkHeap(h))
     h = LazyPairingHeap(1 to 10: _*)
-    assert(checkHeap((x:Int) => true, h))
+    assert(checkHeap(h))
     h = LazyPairingHeap(1 to 10 reverse: _*)
-    assert(checkHeap((x:Int) => true, h))
+    assert(checkHeap(h))
   }
 }

@@ -36,26 +36,15 @@ class LazyBinomialHeapSuite extends FunSuite {
 
   import LazyBinomialHeap._
   def checkRank[A](t: Tree[A]): Boolean = {
-    def computeRank[A](t: Tree[A]): Int = {
-      @tailrec def computeRankAcc[A](t: Tree[A], acc: Int): Int = t match {
-        case Tree(_, _, Nil) => acc
-        case Tree(_, _, x :: _) => computeRankAcc(x, acc+1)
-      }
-      computeRankAcc(t, 0)
-    }
-    def checkRankList[A](l: List[Tree[A]], r: Int): Boolean = l match {
-      case Nil => r == -1
-      case x :: xs =>
-        (r == computeRank(x)) &&
-        checkRankList(xs, r-1)
-    }
-    t match {
-      case Tree(r, _, l) => {
-        val rank = computeRank(t)
-        (r == rank) &&
-        checkRankList(l, r-1)
+    def checkRankH(t: Tree[A]): (Int, Boolean) = t match {
+      case Tree(rnk, _, Nil) => (0, rnk == 0)
+      case Tree(rnk, _, xs)  => {
+        val (ranks, bools) = xs.map(checkRankH(_)).unzip
+        val checkOrder = (ranks, (0 until rnk).reverse).zipped.forall(_ == _)
+        (ranks.head+1, bools.forall(identity) && (xs.length == rnk) && checkOrder)
       }
     }
+    checkRankH(t)._2
   }
   def checkRanks[A](l: List[Tree[A]]): Boolean = l.forall(checkRank(_))
 

@@ -42,22 +42,21 @@ class WeightBiasedLeftistHeapSuite extends FunSuite {
     val h = WeightBiasedLeftistHeap(2,4,6,8,10,1,3,5,7,9)
     expect(1) { h.findMin }
   }
-  
+
+  import WeightBiasedLeftistHeap._
   def checkSize[A](h: WeightBiasedLeftistHeap[A]): Boolean = {
-    import WeightBiasedLeftistHeap._
-    def computeSize[A](h: WeightBiasedLeftistHeap[A]): Int = h match {
-      case Leaf => 0
-      case Branch(_, _, l, r) => 1 + computeSize(l) + computeSize(r)
+    def checkSizeH(h: WeightBiasedLeftistHeap[A]): (Int, Boolean) = h match {
+      case Leaf => (0, true)
+      case Branch(s, _, l, r) => {
+        val (ls, lb) = checkSizeH(l)
+        val (rs, rb) = checkSizeH(r)
+        val s2 = 1+ls+rs
+        (s2, lb && rb && (s == s2))
+      }
     }
-    h match {
-      case Leaf => true
-      case Branch(s, _, l, r) =>
-        (s == computeSize(h)) &&
-        checkSize(l) &&
-        checkSize(r)
-    }
+    checkSizeH(h)._2
   }
-  
+
   test("check size of empty heap") {
     val h = WeightBiasedLeftistHeap.empty
     assert(checkSize(h))
@@ -74,7 +73,6 @@ class WeightBiasedLeftistHeapSuite extends FunSuite {
   }
   
   def checkLeftist[A](h: WeightBiasedLeftistHeap[A]): Boolean = {
-    import WeightBiasedLeftistHeap._
     h match {
       case Leaf => true
       case Branch(_, _, l, r) =>
