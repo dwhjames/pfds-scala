@@ -34,3 +34,8 @@ Chapter Six
 * LazyBinomialHeap
 * PhysicistsQueue
 * LazyPairingHeap
+
+Chapter Seven
+-------------
+
+* RealTimeQueue
