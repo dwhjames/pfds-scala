@@ -5,18 +5,11 @@ class BankersQueue[+A] private (
   private[chapter6] val front: Stream[A],
   private[chapter6] val lenrear: Int,
   private[chapter6] val rear: Stream[A]) {
+  import BankersQueue._
 
   def isEmpty: Boolean = lenfront == 0
 
   def size: Int = lenfront + lenrear
-
-  private[chapter6] def check[B](lenf: Int, f: Stream[B],
-                                 lenr: Int, r: Stream[B]): BankersQueue[B] = {
-    if (lenr <= lenf)
-      new BankersQueue(lenf, f, lenr, r)
-    else
-      new BankersQueue(lenf + lenr, f ++ r.reverse, 0, Stream.empty)
-  }
 
   def enqueue[B >: A](x: B): BankersQueue[B] =
     check(lenfront, front, lenrear+1, x +: rear)
@@ -42,5 +35,19 @@ object BankersQueue {
       q = q.enqueue(a)
     }
     q
+  }
+
+  private def appRev[A](s: Stream[A], t: Stream[A]): Stream[A] =
+    if (s.isEmpty)
+      t.reverse
+    else
+      s.head #:: appRev(s.tail, t)
+
+  private[chapter6] def check[A](lenf: Int, f: Stream[A],
+                                 lenr: Int, r: Stream[A]): BankersQueue[A] = {
+    if (lenr <= lenf)
+      new BankersQueue(lenf, f, lenr, r)
+    else
+      new BankersQueue(lenf + lenr, appRev(f, r), 0, Stream.empty)
   }
 }

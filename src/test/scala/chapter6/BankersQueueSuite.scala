@@ -72,4 +72,13 @@ class BankersQueueSuite extends FunSuite {
     assert(invariant(q))
     assert(q.isEmpty)
   }
+
+  test("check delays reversal") {
+    def bottom: Stream[Int] = throw new Exception("bottom was forced!")
+    val q = BankersQueue.check(1, Stream(1), 2, 3 #:: 2 #:: bottom)
+    expect(1) { q.head }
+    intercept[Exception] {
+      q.tail
+    }
+  }
 }
