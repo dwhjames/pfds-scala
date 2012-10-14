@@ -1,6 +1,6 @@
 package chapter6
 
-class LazyBinomialHeap[+A <% Ordered[A]] private(h: => List[LazyBinomialHeap.Tree[A]]) {
+class LazyBinomialHeap[+A <% Ordered[A]] private[chapter6](h: => List[LazyBinomialHeap.Tree[A]]) {
   import LazyBinomialHeap._
 
   private[chapter6] lazy val heap: Heap[A] = h

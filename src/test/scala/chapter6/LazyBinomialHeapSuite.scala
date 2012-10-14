@@ -66,7 +66,7 @@ class LazyBinomialHeapSuite extends FunSuite {
 
   def checkRankOrder[A](l: List[Tree[A]]): Boolean = {
     val ranks = l.map(_.rank)
-    (ranks, ranks.tail).zipped.forall(_ <= _)
+    (ranks, ranks.tail).zipped.forall(_ < _)
   }
 
   test("check rank ordering after insertions") {
@@ -83,5 +83,22 @@ class LazyBinomialHeapSuite extends FunSuite {
     assert(checkRankOrder(h.heap))
     h = h.deleteMin
     assert(checkRankOrder(h.heap))
+  }
+
+  def bottom = throw new Exception("bottom was forced!")
+
+  test("insert is lazy") {
+    val h = new LazyBinomialHeap(bottom)
+    h.insert(1)
+  }
+
+  test("merge is lazy") {
+    val h = new LazyBinomialHeap(bottom)
+    h merge h
+  }
+
+  test("deleteMin is not lazy") {
+    val h = new LazyBinomialHeap(bottom)
+    h.insert(1).deleteMin
   }
 }
