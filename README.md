@@ -39,3 +39,4 @@ Chapter Seven
 -------------
 
 * RealTimeQueue
+* ScheduledBinomialHeap
