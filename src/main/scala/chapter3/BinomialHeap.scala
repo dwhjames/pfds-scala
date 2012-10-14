@@ -1,14 +1,14 @@
 package chapter3
 
-class BinomialHeap[A <% Ordered[A]] private(private[chapter3] val heap: List[BinomialHeap.Tree[A]]) {
+class BinomialHeap[+A <% Ordered[A]] private(private[chapter3] val heap: List[BinomialHeap.Tree[A]]) {
   import BinomialHeap._
   
   def isEmpty = heap.isEmpty
   
-  def insert(x: A) =
+  def insert[B >: A <% Ordered[B]](x: B): BinomialHeap[B] =
     new BinomialHeap(insertTree(Tree(0,x,Nil), heap))
   
-  def merge(that: BinomialHeap[A]): BinomialHeap[A] =
+  def merge[B >: A <% Ordered[B]](that: BinomialHeap[B]): BinomialHeap[B] =
     new BinomialHeap(mergeHeaps(this.heap, that.heap))
   
   def findMin: A = removeMinTree(this.heap)._1.root
@@ -22,7 +22,7 @@ class BinomialHeap[A <% Ordered[A]] private(private[chapter3] val heap: List[Bin
 }
 
 object BinomialHeap {
-  type Heap[A] = List[Tree[A]]
+  type Heap[+A] = List[Tree[A]]
   
   def empty[A <% Ordered[A]]: BinomialHeap[A] = new BinomialHeap[A](Nil)
   
@@ -34,13 +34,13 @@ object BinomialHeap {
     h
   }
   
-  private def insertTree[A](t: Tree[A], l: Heap[A]): Heap[A] = l match {
+  private def insertTree[A <% Ordered[A]](t: Tree[A], l: Heap[A]): Heap[A] = l match {
     case Nil => List(t)
     case x :: xs =>
-      if (t.rank < x.rank) t :: l else insertTree(t.link(x), xs)
+      if (t.rank < x.rank) t :: l else insertTree(t link x, xs)
   }
   
-  private def mergeHeaps[A](h1: Heap[A], h2: Heap[A]): Heap[A] = (h1, h2) match {
+  private def mergeHeaps[A <% Ordered[A]](h1: Heap[A], h2: Heap[A]): Heap[A] = (h1, h2) match {
     case (_, Nil) => h1
     case (Nil, _) => h2
     case (x :: xs, y :: ys) =>
@@ -49,7 +49,7 @@ object BinomialHeap {
       else if (y.rank < x.rank)
         y :: mergeHeaps(h1, ys)
       else
-        insertTree(x.link(y), mergeHeaps(xs, ys))
+        insertTree(x link y, mergeHeaps(xs, ys))
   }
   
   private def removeMinTree[A <% Ordered[A]](h: Heap[A]): (Tree[A], Heap[A]) = h match {
@@ -61,12 +61,12 @@ object BinomialHeap {
     }
   }
   
-  private[chapter3] case class Tree[A <% Ordered[A]](
+  private[chapter3] case class Tree[+A <% Ordered[A]](
     val rank: Int,
     val root: A,
     val subTrees: List[Tree[A]]) {
   
-    def link(that: Tree[A]): Tree[A] =
+    def link[B >: A <% Ordered[B]](that: Tree[B]): Tree[B] =
       if (root <= that.root)
         Tree(rank + 1, root, that :: subTrees)
       else
