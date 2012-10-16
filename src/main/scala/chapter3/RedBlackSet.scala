@@ -40,6 +40,7 @@ sealed abstract class RedBlackSet[+A <% Ordered[A]] {
     }
   }
 
+/* insert with monolithic balancing
   def insert[B >: A <% Ordered[B]](x: B): RedBlackSet[B] = {
     def ins(set: RedBlackSet[A]): Branch[B] = set match {
       case Leaf => Branch(Red, Leaf, x, Leaf)
@@ -48,6 +49,21 @@ sealed abstract class RedBlackSet[+A <% Ordered[A]] {
           balance(color, ins(a), y, b)
         else if (x > y)
           balance(color, a, y, ins(b))
+        else s
+    }
+    val Branch(_, a, y, b) = ins(this)
+    Branch(Black, a, y, b)
+  }
+*/
+
+  def insert[B >: A <% Ordered[B]](x: B): RedBlackSet[B] = {
+    def ins(set: RedBlackSet[A]): Branch[B] = set match {
+      case Leaf => Branch(Red, Leaf, x, Leaf)
+      case s @ Branch(color, a, y, b) =>
+        if (x < y)
+          lbalance(color, ins(a), y, b)
+        else if (x > y)
+          rbalance(color, a, y, ins(b))
         else s
     }
     val Branch(_, a, y, b) = ins(this)
@@ -66,6 +82,7 @@ object RedBlackSet {
     s
   }
 
+/* monolithic balancing function
   private[chapter3] def balance[A <% Ordered[A]](
     color: Color,
     left: RedBlackSet[A],
@@ -77,6 +94,37 @@ object RedBlackSet {
           Branch(Red, Branch(Black, a, x, b), y, Branch(Black, c, z, d))
         case (Branch(Red, a, x, Branch(Red, b, y, c)), z, d) =>
           Branch(Red, Branch(Black, a, x, b), y, Branch(Black, c, z, d))
+        case (a, x, Branch(Red, Branch(Red, b, y, c), z, d)) =>
+          Branch(Red, Branch(Black, a, x, b), y, Branch(Black, c, z, d))
+        case (a, x, Branch(Red, b, y, Branch(Red, c, z, d))) =>
+          Branch(Red, Branch(Black, a, x, b), y, Branch(Black, c, z, d))
+        case _ => Branch(color, left, elem, right)
+      }
+  }
+*/
+
+  private[chapter3] def lbalance[A <% Ordered[A]](
+    color: Color,
+    left: RedBlackSet[A],
+    elem: A,
+    right: RedBlackSet[A]): Branch[A] = color match {
+      case Red => Branch(color, left, elem, right)
+      case Black => (left, elem, right) match {
+        case (Branch(Red, Branch(Red, a, x, b), y, c), z, d) =>
+          Branch(Red, Branch(Black, a, x, b), y, Branch(Black, c, z, d))
+        case (Branch(Red, a, x, Branch(Red, b, y, c)), z, d) =>
+          Branch(Red, Branch(Black, a, x, b), y, Branch(Black, c, z, d))
+        case _ => Branch(color, left, elem, right)
+      }
+  }
+
+  private[chapter3] def rbalance[A <% Ordered[A]](
+    color: Color,
+    left: RedBlackSet[A],
+    elem: A,
+    right: RedBlackSet[A]): Branch[A] = color match {
+      case Red => Branch(color, left, elem, right)
+      case Black => (left, elem, right) match {
         case (a, x, Branch(Red, Branch(Red, b, y, c), z, d)) =>
           Branch(Red, Branch(Black, a, x, b), y, Branch(Black, c, z, d))
         case (a, x, Branch(Red, b, y, Branch(Red, c, z, d))) =>
