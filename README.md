@@ -13,6 +13,7 @@ Chapter Three
 * LeftistHeap (height biased)
 * WeightBiasedLeftistHeap
 * BinomialHeap
+* RedBlackSet
 
 Chapter Four
 ------------
