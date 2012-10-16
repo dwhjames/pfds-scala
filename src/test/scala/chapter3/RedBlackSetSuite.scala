@@ -68,4 +68,16 @@ class RedBlackSetSuite extends FunSuite {
     s = s.insert(6)
     assert(invariant(s))
   }
+
+  test("fromSortedList ensures invariant") {
+    import RedBlackSet._
+    assert(invariant(fromSortedList(Nil)))
+    assert(invariant(fromSortedList(List(1))))
+    assert(invariant(fromSortedList(List(1,2))))
+    assert(invariant(fromSortedList(List(1,2,3))))
+    assert(invariant(fromSortedList(List(1,2,3,4))))
+    assert(invariant(fromSortedList(List(1,2,3,4,5))))
+    assert(invariant(fromSortedList(List(1,2,3,4,5,6))))
+    assert(invariant(fromSortedList(List(1,2,3,4,5,6,7))))
+  }
 }

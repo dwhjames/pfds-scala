@@ -119,6 +119,29 @@ object RedBlackSet {
     s
   }
 
+  def fromSortedList[A <% Ordered[A]](list: List[A]): RedBlackSet[A] = {
+    def local(n: Int, l: List[A]): (Branch[A], List[A]) = {
+      if (n == 1)
+        (Branch(Red, Leaf, l.head, Leaf), l.tail)
+      else if (n == 2) {
+        val (left, x :: rest) = local(1, l)
+        (Branch(Black, left, x, Leaf), rest)
+      } else if (n % 2 == 1) {
+        val (left, x :: restl) = local(n / 2, l)
+        val (right, rest) = local(n / 2, restl)
+        (Branch(Black, left, x, right), rest)
+      } else {
+        val (left, x :: restl) = local(n / 2, l)
+        val (right, rest) = local(n / 2 - 1, restl)
+        (Branch(Black, left, x, right.copyWith(color = Black)), rest)
+      }
+    }
+    if (list.isEmpty)
+      Leaf
+    else
+      local(list.length, list)._1
+  }
+
 /* monolithic balancing function
   private[chapter3] def balance[A <% Ordered[A]](
     color: Color,
