@@ -7,6 +7,7 @@ sealed abstract class RedBlackSet[+A <% Ordered[A]] {
 
   def isEmpty: Boolean
 
+/* Standard membership function
   def member[B >: A <% Ordered[B]](x: B): Boolean = this match {
     case Leaf => false
     case Branch(_, l,y,r) =>
@@ -16,6 +17,27 @@ sealed abstract class RedBlackSet[+A <% Ordered[A]] {
         r.member(x)
       else
         true
+  }
+*/
+
+  def member[B >: A <% Ordered[B]](x: B): Boolean = {
+    // cand is most recent element that might equal x
+    @tailrec def local(cand: A, s: RedBlackSet[A]): Boolean = s match {
+      case Leaf => x == cand
+      case Branch(_, l,y,r) =>
+        if (x < y)
+          local(cand,l)
+        else
+          local(y, r)
+    }
+    this match {
+      case Leaf => false
+      case Branch(_, l,y,r) =>
+        if (x < y)
+          l.member(x)
+        else
+          local(y,r)
+    }
   }
 
   def insert[B >: A <% Ordered[B]](x: B): RedBlackSet[B] = {

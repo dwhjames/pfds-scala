@@ -14,7 +14,8 @@ sealed abstract class Set[+A <% Ordered[A]] {
         Branch(l, y, r.insert(x))
       else b
   }
-  /*
+
+/* Standard membership function
   def member[B >: A <% Ordered[B]](x: B): Boolean = this match {
       case Leaf => false
       case Branch(l,y,r) =>
@@ -25,14 +26,15 @@ sealed abstract class Set[+A <% Ordered[A]] {
         else
           true
     }
-  */
+*/
   
   def member[B >: A <% Ordered[B]](x: B): Boolean = {
-    @tailrec def local(a: A, s: Set[A]): Boolean = s match {
-      case Leaf => x == a
+    // cand is most recent element that might equal x
+    @tailrec def local(cand: A, s: Set[A]): Boolean = s match {
+      case Leaf => x == cand
       case Branch(l,y,r) =>
         if (x < y)
-          local(a,l)
+          local(cand,l)
         else
           local(y, r)
     }
