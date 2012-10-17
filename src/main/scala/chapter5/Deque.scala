@@ -3,6 +3,7 @@ package chapter5
 class Deque[+A] private (
   private[chapter5] val front: List[A],
   private[chapter5] val rear: List[A]) {
+  import Deque._
   
   def isEmpty: Boolean = front.isEmpty && rear.isEmpty
   
@@ -20,27 +21,12 @@ class Deque[+A] private (
       }
     }
   
-  private def check[B](front: List[B], rear: List[B]): Deque[B] =
-    if (front.isEmpty) {
-      val l = rear.length
-      if (l > 1) {
-        val (r, f) = rear splitAt (l / 2)
-        new Deque(f.reverse, r)
-      } else new Deque(front, rear)
-    } else if (rear.isEmpty) {
-      val l = front.length
-      if (l > 1) {
-        val (f, r) = front splitAt (l / 2)
-        new Deque(f, r.reverse)
-      } else new Deque(front, rear)
-    } else new Deque(front, rear)
-  
   def tail: Deque[A] = front match {
     case Nil =>
       if (rear.isEmpty)
         throw new Exception("Deque.tail: empty deque")
       else
-        Deque.empty[A]
+        empty
     case h :: t => check(t, rear)
   }
   
@@ -49,7 +35,7 @@ class Deque[+A] private (
       if (front.isEmpty)
         throw new Exception("Deque.init: empty deque")
       else
-        Deque.empty[A]
+        empty
     case h :: t => check(front, t)
   }
   
@@ -70,4 +56,19 @@ object Deque {
     }
     q
   }
+
+  private def check[A](front: List[A], rear: List[A]): Deque[A] =
+    if (front.isEmpty) {
+      val l = rear.length
+      if (l > 1) {
+        val (r, f) = rear splitAt (l / 2)
+        new Deque(f.reverse, r)
+      } else new Deque(front, rear)
+    } else if (rear.isEmpty) {
+      val l = front.length
+      if (l > 1) {
+        val (f, r) = front splitAt (l / 2)
+        new Deque(f, r.reverse)
+      } else new Deque(front, rear)
+    } else new Deque(front, rear)
 }
