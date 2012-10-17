@@ -42,6 +42,11 @@ Chapter Seven
 * RealTimeQueue
 * ScheduledBinomialHeap
 
+Chapter Eight
+-------------
+
+* HoodMelvilleQueue
+
 Links
 -----
 
