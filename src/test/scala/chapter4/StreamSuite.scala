@@ -48,7 +48,17 @@ class StreamSuite extends FunSuite {
   
   test("appending is lazy") {
     val s = SCons(1, bottom)
-    s ++ s
+    s ++ bottom
+  }
+
+  test("append's param is call-by-need") {
+    var n = 0
+    def sideEffect = { n += 1; SNil }
+    val s = SCons(1, SCons(2, SNil)) ++ SCons(3, sideEffect)
+    val t = s.tail.tail
+    t.tail
+    assert(t.tail === SNil)
+    expect(1) { n }
   }
   
   test("take n from nil") {

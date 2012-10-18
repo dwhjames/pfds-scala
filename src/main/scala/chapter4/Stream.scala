@@ -7,7 +7,7 @@ sealed abstract class Stream[+A] {
   
   def tail: Stream[A]
   
-  def ++[B >: A](that: Stream[B]): Stream[B] = this match {
+  def ++[B >: A](that: => Stream[B]): Stream[B] = this match {
     case SNil => that
     case _    => SCons(head, tail ++ that)
   }
