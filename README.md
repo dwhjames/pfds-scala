@@ -46,6 +46,7 @@ Chapter Eight
 -------------
 
 * HoodMelvilleQueue
+* BankersDeque
 
 Links
 -----
