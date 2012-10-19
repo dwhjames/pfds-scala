@@ -47,6 +47,7 @@ Chapter Eight
 
 * HoodMelvilleQueue
 * BankersDeque
+* RealTimeDeque
 
 Links
 -----
